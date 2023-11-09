@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <title></title>
+
+    <style>
+      html {
+        background-color: #122;
+      }
+
+      #textAreaSVG {
+        background-color: #122;
+        color: #eee;
+	padding: 10px;
+      }
+
+      #appLabel {
+        background-color: #122;
+        color: #ccc;
+        font-family: sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        vertical-align: text-bottom;
+      }
+
+      #colorPickerButton,
+      #boilerButton,
+#fontTogglerButton {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <span id="appLabel">SVG Fiddle</span>
+
+
+    <button id="fontTogglerButton">
+      <img src="font-toggle-icon.png" alt="Font Toggler">
+    </button>
+
+    <button id="colorPickerButton">
+      <img src="color-icon.png" alt="Color Picker">
+    </button>
+
+    <button id="boilerButton">
+      <img src="kettle-icon.png" alt="Boiler Plate Injector">
+    </button>
+
+    <input type="color" id="colorPicker" style="display: none;">
+
+    <div>
+      <!-- Textarea with id "textAreaSVG" -->
+      <textarea id="textAreaSVG" rows="5" cols="40"></textarea>
+    </div>
+
+    <div id="renderedSVG">
+      </svg>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+
+const fontTogglerButton = document.getElementById('fontTogglerButton');
+
+        const colorPickerButton = document.getElementById('colorPickerButton');
+        const colorPicker = document.getElementById('colorPicker');
+
+
+        const boilerButton = document.getElementById('boilerButton');
+        const textAreaSVG = document.getElementById("textAreaSVG");
+        const renderedSVG = document.getElementById('renderedSVG');
+
+      const fontSizes = ['14px', '20px', '30px', '40px', '50px'];
+      let fontSizeIndex = 0;
+
+        // Function to get highlighted text from the textarea
+        function getHighlightedText() {
+          const start = textAreaSVG.selectionStart;
+          const end = textAreaSVG.selectionEnd;
+          if (start !== end) {
+            return textAreaSVG.value.substring(start, end);
+          }
+          return null;
+        }
+
+        // Function to update the rect color and replace highlighted text
+        function updateRectColor() {
+          // Check if there is highlighted text
+          const highlightedText = getHighlightedText();
+          if (highlightedText) {
+            // Extract color value without the '#' character
+            let newStr = colorPicker.value.substring(1);
+            // Replace the highlighted text with the new color value
+            textAreaSVG.value = textAreaSVG.value.replace(highlightedText, newStr);
+            let inputHtml = textAreaSVG.value;
+            renderedSVG.innerHTML = inputHtml;
+          }
+        }
+
+
+        colorPickerButton.addEventListener('click', () => {
+          colorPicker.click();
+        });
+
+
+
+
+
+        // Add an event listener to the color picker input
+        colorPicker.addEventListener("input", updateRectColor);
+
+
+        textAreaSVG.addEventListener('input', function() { // Function to update the rect color and replace highlighted text
+          function updateRectColor() {
+            // Check if there is highlighted text
+            const highlightedText = getHighlightedText();
+            if (highlightedText) {
+              // Extract color value without the '#' character
+              let newStr = colorPicker.value.substring(1);
+              // Replace the highlighted text with the new color value
+              textAreaSVG.value = textAreaSVG.value.replace(highlightedText, newStr);
+              let inputHtml = textAreaSVG.value;
+              renderedSVG.innerHTML = inputHtml;
+            }
+          }
+          const inputHtml = textAreaSVG.value;
+          renderedSVG.innerHTML = inputHtml;
+        });
+
+        let inputHtml = textAreaSVG.value;
+        renderedSVG.innerHTML = inputHtml;
+
+
+
+        // Event listener for the inject button
+        boilerButton.addEventListener('click', function() {
+          // You can inject any string you want into the textarea here
+          var injectedString = '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">\n\n<rect width="400" height="400" fill="#5e5c64" />\n\n<g transform="translate(200,200) scale(1,-1)">\n\n<circle cx="0" cy="0" r="100" fill="#e5a50a" />\n\n</g>\n\n</svg>';
+          textAreaSVG.value += injectedString;
+          // Update the rendered output
+          renderedSVG.innerHTML = textAreaSVG.value;
+        });
+
+
+
+
+
+
+      function toggleFontSize() {
+        if (fontSizeIndex >= fontSizes.length) {
+          fontSizeIndex = 0;
+        }
+        textAreaSVG.style.fontSize = fontSizes[fontSizeIndex];
+        fontSizeIndex++;
+      }
+
+      // Add an event listener to the button
+      fontTogglerButton.addEventListener("click", function() {
+        // Toggle font-size when the button is clicked
+        toggleFontSize();
+      });
+
+      // Initialize the font-size
+      toggleFontSize();
+      
+
+
+
+
+
+
+
+
+
+
+
+      });
+
+    </script>
+
+  </body>
+
+</html>
