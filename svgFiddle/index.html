@@ -144,7 +144,7 @@ const fontTogglerButton = document.getElementById('fontTogglerButton');
         // Event listener for the inject button
         boilerButton.addEventListener('click', function() {
           // You can inject any string you want into the textarea here
-          var injectedString = '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">\n\n<rect width="400" height="400" fill="#5e5c64" />\n\n<g transform="translate(200,200) scale(1,-1)">\n\n<circle cx="0" cy="0" r="100" fill="#e5a50a" />\n\n</g>\n\n</svg>';
+          var injectedString = '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">\n\n<rect width="400" height="400" fill="#5e5c64" />\n\n<g transform="translate(200,200) scale(1,-1)">\n\n<circle cx="0" cy="0" r="100" stroke="#fff" stroke-width="5" fill="none" />\n\n</g>\n\n</svg>';
           textAreaSVG.value += injectedString;
           // Update the rendered output
           renderedSVG.innerHTML = textAreaSVG.value;
