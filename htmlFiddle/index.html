@@ -1,107 +1,150 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic HTML and CSS</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #222;
-        color: #bbb;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic HTML and CSS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #222;
+      color: #bbb;
+    }
 
-      #iframeContainer {
-        border: 0px solid #ccc;
-        height: 300px;
-      }
+    #iframeContainer {
+      border: 0px solid #ccc;
+      height: 300px;
+    }
 
-      #htmlTextarea,
-      #cssTextarea {
-        background-color: #eee;
-        color: #000;
-        font-family: monospace;
-        font-weight: 400;
-        font-size: 1.25em;
-        outline: none;
-        border: none;
-        padding: 10px;
-        caret-color: #000;
-      }
+    #htmlTextarea,
+    #markdownTextarea,
+    #cssTextarea {
+      background-color: #eee;
+      color: #000;
+      font-family: monospace;
+      font-weight: 400;
+      font-size: 1.25em;
+      outline: none;
+      border: none;
+      padding: 10px;
+      caret-color: #000;
+    }
 
-      #copyButton {
-        background-color: #640;
-        color: white;
-        padding: 6px 6px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
+    #copyButton,
+    #insertMarkdownButton {
+      background-color: #481;
+      color: white;
+      padding: 6px 6px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
 
-    </style>
-  </head>
+  </style>
+  <!-- Add the Showdown.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+</head>
 
-  <body>
-    <span>Dynamic HTML and CSS</span>
-
-    <!-- Button to form and copy HTML to clipboard -->
-    <button id="copyButton" onclick="copyToClipboard()">Copy HTML/CSS to Clipboard</button>
-    <br><br>
-
-    <!-- Textareas for HTML and CSS -->
-    <textarea id="htmlTextarea" rows="10" cols="150">hello</textarea>
-    <br> <br>
-    <textarea id="cssTextarea" rows="5" cols="150">html {background-color: #ace; }</textarea>
-    <br> <br>
-    <!-- Container for the iframe -->
-    <div id="iframeContainer">
-      <iframe id="outputIframe" width="100%" height="100%" frameborder="0"></iframe>
-    </div>
+<body>
 
 
 
-    <!-- JavaScript to update the iframe content -->
-    <script>
-      // Function to update the iframe content
-      function updateIframe() {
-        // Get content from textareas
-        var htmlContent = document.getElementById('htmlTextarea').value;
-        var cssContent = document.getElementById('cssTextarea').value;
 
-        // Get the iframe element
-        var iframe = document.getElementById('outputIframe');
+  <span>Dynamic HTML and CSS</span>
 
-        // Create a data URI for the HTML content with a style tag for CSS
-        var dataUri = 'data:text/html;charset=utf-8,' + encodeURIComponent('<html><head><style>' + cssContent + '</style></head><body>' + htmlContent + '</body></html>');
+  <!-- Button to form and copy HTML to clipboard -->
+  <button id="copyButton" onclick="copyToClipboard()">Copy HTML/CSS to Clipboard</button>
 
-        // Set the iframe src attribute to the data URI
-        iframe.src = dataUri;
-      }
+  <!-- Button to insert Markdown at cursor in HTML Textarea -->
+  <button id="insertMarkdownButton" onclick="insertMarkdown()">Insert Markdown at Cursor</button>
+  <br><br>
 
-      // Attach input event listeners to the textareas
-      document.getElementById('htmlTextarea').addEventListener('input', updateIframe);
-      document.getElementById('cssTextarea').addEventListener('input', updateIframe);
+  <!-- New Textarea for Markdown -->
+ 
 
-      // Function to copy HTML to clipboard
-      function copyToClipboard() {
-        var htmlContent = document.getElementById('htmlTextarea').value;
-        var cssContent = document.getElementById('cssTextarea').value;
+  </textarea>
 
-        // Form the complete HTML content
-        var completeHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Dynamic HTML and CSS</title>\n<style>\n' + cssContent + '\n</style>\n</head>\n<body>\n' + htmlContent + '\n</body>\n</html>';
+  <!-- Textareas for HTML and CSS -->
+  <textarea id="markdownTextarea" rows="2" cols="80">
+![Alt text](https://dummyimage.com/200x150/000/fff&text=image "opt title")
 
-        // Copy to clipboard
-        navigator.clipboard.writeText(completeHtml).then(function() {
-          alert('HTML copied to clipboard!');
-        }).catch(function(err) {
-          console.error('Unable to copy HTML to clipboard', err);
-        });
-      }
+This is [an example](http://example.com/ "Title") inline link.
+  </textarea>
+  <br> <br>
+  <textarea id="htmlTextarea" rows="4" cols="80"></textarea>
+  <br> <br>
+  <textarea id="cssTextarea" rows="2" cols="80">html {background-color: #ace; }</textarea>
+  <br> <br>
 
-    </script>
-  </body>
+  <!-- Container for the iframe -->
+  <div id="iframeContainer">
+    <iframe id="outputIframe" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+
+  <!-- JavaScript to update the iframe content and insert Markdown at cursor -->
+  <script>
+    // Function to update the iframe content
+    function updateIframe() {
+      // Get content from textareas
+      var htmlContent = document.getElementById('htmlTextarea').value;
+      var cssContent = document.getElementById('cssTextarea').value;
+
+      // Get the iframe element
+      var iframe = document.getElementById('outputIframe');
+
+      // Create a data URI for the HTML content with a style tag for CSS
+      var dataUri = 'data:text/html;charset=utf-8,' + encodeURIComponent('<html><head><style>' + cssContent + '</style></head><body>' + htmlContent + '</body></html>');
+
+      // Set the iframe src attribute to the data URI
+      iframe.src = dataUri;
+    }
+
+    // Attach input event listeners to the textareas
+    document.getElementById('htmlTextarea').addEventListener('input', updateIframe);
+    document.getElementById('cssTextarea').addEventListener('input', updateIframe);
+
+    // Function to insert Markdown at cursor in HTML Textarea
+    function insertMarkdown() {
+      var markdownContent = document.getElementById('markdownTextarea').value;
+      var htmlTextarea = document.getElementById('htmlTextarea');
+
+      // Insert Markdown at the cursor position
+      var cursorPos = htmlTextarea.selectionStart;
+      var textBefore = htmlTextarea.value.substring(0, cursorPos);
+      var textAfter = htmlTextarea.value.substring(cursorPos);
+
+      htmlTextarea.value = textBefore + convertMarkdownToHtml(markdownContent) + textAfter;
+      updateIframe(); // Update the iframe content after inserting Markdown
+    }
+
+    // Function to copy HTML to clipboard
+    function copyToClipboard() {
+      var htmlContent = document.getElementById('htmlTextarea').value;
+      var cssContent = document.getElementById('cssTextarea').value;
+
+      // Form the complete HTML content
+      var completeHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Dynamic HTML and CSS</title>\n<style>\n' + cssContent + '\n</style>\n</head>\n<body>\n' + htmlContent + '\n</body>\n</html>';
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(completeHtml).then(function () {
+        alert('HTML copied to clipboard!');
+      }).catch(function (err) {
+        console.error('Unable to copy HTML to clipboard', err);
+      });
+    }
+
+    // Function to convert Markdown to HTML using Showdown.js
+    function convertMarkdownToHtml(markdown) {
+      var converter = new showdown.Converter();
+      return converter.makeHtml(markdown);
+    }
+
+    insertMarkdown();
+    updateIframe();
+  </script>
+</body>
 
 </html>
