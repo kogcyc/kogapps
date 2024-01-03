@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>SVG Fiddle</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML Fiddle Lite</title>
+    <meta name="theme-color" content="#000000">
+
+
+    <style>
+      html {
+        background-color: #000;
+      }
+
+      #htmlInput {
+        background-color: #eee;
+        font-family: monospace;
+        border: none;
+        padding: 10px;
+        outline: none;
+      }
+
+
+      #renderedHtml {
+        background-color: #eee;
+        padding: 10px;
+        width: 80%;
+      }
+
+    </style>
+
+  </head>
+
+
+  </head>
+
+  <body>
+    <div>
+      <div>
+        <textarea id="htmlInput" cols="50" rows="10">hello</textarea>
+      </div>
+      <div>
+        <div id="renderedHtml"></div>
+      </div>
+    </div>
+
+    <script>
+      const htmlInput = document.getElementById('htmlInput');
+      const renderedHtml = document.getElementById('renderedHtml');
+      renderedHtml.innerHTML = htmlInput.value;
+
+      htmlInput.addEventListener('input', function() {
+        const inputHtml = htmlInput.value;
+        renderedHtml.innerHTML = inputHtml;
+      });
+
+    </script>
+  </body>
+
+</html>
