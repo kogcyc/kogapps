@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Location on Google Maps</title>
+    <title>Get GPS Location</title>
 </head>
 <body>
 
-<h1>Show Location on Google Maps</h1>
+<h1>Get GPS Location</h1>
 
 <button onclick="getLocation()">Get My Location</button>
 
@@ -24,13 +24,26 @@
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
-        // Construct the Google Maps URL
-        const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-
-        // Open the URL in a new tab or window
-        window.open(googleMapsUrl, '_blank');
+        alert(`Your location is: Latitude ${latitude}, Longitude ${longitude}`);
     }
 
     function showError(error) {
         switch (error.code) {
-        
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+                break;
+        }
+    }
+</script>
+
+</body>
+</html>
